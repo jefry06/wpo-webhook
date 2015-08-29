@@ -1,19 +1,22 @@
 var express = require('express');
 var router = express.Router();
 
-var Inbox = require('../services/counter.service.js');
+/* logger */
+var logger = require('../helper/logger.js').logger;
+
+var Inbox = require('../services/inbox.service.js');
 var InboxService = new Inbox();
 
 /* Post Counter Add Hit. */
-router.get('/label/:label_name', function(request, response, next) {
+router.post('/label/:labelname', function(request, response, next) {     
     var params = {
-        label : request.params.label_name,
-        phone : request.params.phone,
-        run   : request.params.run,
-        time  : request.params.time,
+        label : request.params.labelname,
+        phone : request.body.phone,
+        run   : request.body.run,
+        time  : request.body.time,
     };
-
-    InboxService.addLabel(params, function(result){
+    logger.info(params);
+    InboxService.receiveLabelJob(params, function(result){
         response.status(result.statusCode);
         response.setHeader("Content-Type", "application/json");
         response.setHeader("Access-Control-Allow-Origin", "*");
@@ -22,6 +25,5 @@ router.get('/label/:label_name', function(request, response, next) {
         response.end();
     });
 });
-
 
 module.exports = router;

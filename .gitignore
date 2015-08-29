@@ -1,3 +1,4 @@
 ./okz-counter.iml
 ./idea
 ./npm-debug.log
+./log/*.*
